@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Өзіңе сәйкес брокерді тап</title>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a9e6e; --green-light: #e8f7f2; --green-dark: #0f6e4e;
+    --amber: #f5a623; --amber-light: #fef8ec;
+    --text: #0f1923; --text-muted: #64748b; --text-light: #94a3b8;
+    --border: #e2e8f0; --surface: #ffffff; --bg: #f0f4f0;
+    --radius: 16px; --radius-sm: 10px;
+    --font-display: 'Geologica', 'Noto Sans', sans-serif;
+    --font-body: 'Noto Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      radial-gradient(ellipse 70% 50% at 15% 10%, rgba(26,158,110,.11) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 85% 85%, rgba(26,158,110,.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 60% 40%, rgba(26,158,110,.04) 0%, transparent 50%);
+  }
+  .container { position:relative; z-index:1; max-width:640px; margin:0 auto; padding:0 20px 60px; }
+
+  /* ── HERO ── */
+  #hero {
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100vh; text-align:center; padding:60px 0 40px;
+    animation:fadeUp .8s cubic-bezier(.16,1,.3,1) both;
+  }
+  .hero-tag {
+    display:inline-flex; align-items:center; gap:7px;
+    background:#fff; color:var(--green-dark);
+    font-family:var(--font-body); font-size:12px; font-weight:600;
+    letter-spacing:.6px; text-transform:uppercase;
+    padding:7px 16px; border-radius:999px; margin-bottom:36px;
+    border:1.5px solid rgba(26,158,110,.2);
+    box-shadow:0 2px 16px rgba(26,158,110,.12);
+  }
+  .hero-dot { width:7px; height:7px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; flex-shrink:0; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.65)} }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 6vw, 46px);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -.3px;
+    margin-bottom: 22px;
+    max-width: 540px;
+    color: var(--text);
+  }
+  .hero-title .line-muted { display:block; color:var(--text); }
+  .hero-title .line-accent {
+    display:block; color:var(--green);
+    position:relative; padding-bottom:8px; margin-top:4px;
+  }
+  .hero-title .line-accent::after {
+    content:'';
+    position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+    width:72px; height:3px;
+    background:linear-gradient(90deg, transparent, var(--green), transparent);
+    border-radius:2px;
+  }
+  .hero-sub { font-size:15px; color:var(--text-muted); line-height:1.7; margin-bottom:44px; max-width:400px; }
+  .hero-stats {
+    display:flex; gap:0; margin-bottom:52px;
+    background:#fff; border:1.5px solid var(--border);
+    border-radius:16px; overflow:hidden;
+    box-shadow:0 2px 20px rgba(0,0,0,.06);
+  }
+  .stat { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:18px 12px; }
+  .stat + .stat { border-left:1.5px solid var(--border); }
+  .stat-num { font-family:var(--font-display); font-size:22px; font-weight:800; color:var(--text); }
+  .stat-num-inline { display:flex; align-items:baseline; gap:3px; }
+  .stat-num-suffix { font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--text); letter-spacing:-.2px; }
+  .stat-label { font-size:11px; color:var(--text-muted); font-weight:500; }
+  .stat-divider { display:none; }
+  .start-btn {
+    display:inline-flex; align-items:center; gap:12px;
+    background:var(--green); color:#fff;
+    font-family:var(--font-body); font-size:16px; font-weight:600;
+    padding:18px 44px; border-radius:14px; border:none; cursor:pointer;
+    transition:all .25s cubic-bezier(.16,1,.3,1);
+    box-shadow:0 4px 24px rgba(26,158,110,.35);
+    letter-spacing:.1px;
+  }
+  .start-btn:hover { background:var(--green-dark); transform:translateY(-3px); box-shadow:0 10px 36px rgba(26,158,110,.45); }
+  .hero-note { font-size:12.5px; color:var(--text-light); margin-top:14px; letter-spacing:.2px; }
+
+  /* QUIZ */
+  #quiz { display:none; padding-top:40px; animation:fadeUp .4s ease both; }
+  .quiz-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
+  .quiz-logo { font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--green); }
+  .quiz-counter { font-size:13px; color:var(--text-muted); font-weight:500; }
+  .progress-track { height:4px; background:var(--border); border-radius:4px; margin-bottom:40px; overflow:hidden; }
+  .progress-fill { height:100%; background:var(--green); border-radius:4px; transition:width .5s cubic-bezier(.4,0,.2,1); }
+  .q-label { font-size:12px; font-weight:600; color:var(--green); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+  .q-title { font-family:var(--font-display); font-size:clamp(17px,3vw,22px); font-weight:700; line-height:1.3; margin-bottom:8px; }
+  .q-sub { font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.5; }
+  .multi-hint { display:inline-flex; align-items:center; gap:6px; background:var(--amber-light); color:#78520a; border:1px solid rgba(245,166,35,.3); border-radius:999px; padding:5px 14px; font-size:12px; font-weight:600; margin-bottom:16px; }
+  .options-grid { display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
+
+  .opt-card { display:flex; align-items:center; gap:14px; padding:14px 18px; background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-sm); cursor:pointer; transition:all .18s; user-select:none; }
+  .opt-card:hover { border-color:var(--green); background:var(--green-light); transform:translateX(4px); }
+  .opt-card.selected { border-color:var(--green); background:var(--green-light); box-shadow:0 0 0 3px rgba(26,158,110,.12); }
+  .opt-card.selected .opt-check { background:var(--green); border-color:var(--green); }
+  .opt-card.selected .opt-check::after { opacity:1; }
+  .opt-card.multi .opt-check { border-radius:5px; }
+  .opt-card.multi.selected .opt-check::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:auto; height:auto; background:transparent; border-radius:0; color:#fff; font-size:12px; font-weight:700; }
+  .opt-check { width:22px; height:22px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; position:relative; transition:all .18s; }
+  .opt-check::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:8px; height:8px; background:#fff; border-radius:50%; opacity:0; transition:opacity .18s; }
+  .opt-icon { font-size:20px; flex-shrink:0; width:28px; text-align:center; }
+  .opt-body { flex:1; }
+  .opt-name { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+  .opt-hint { font-size:12px; color:var(--text-muted); }
+  .opt-meta { margin-top:5px; }
+  .risk-badge { display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:600; padding:2px 9px; border-radius:999px; white-space:nowrap; }
+  .risk-low  { background:#dcfce7; color:#166534; }
+  .risk-mid  { background:#fef9c3; color:#854d0e; }
+  .risk-high { background:#fee2e2; color:#991b1b; }
+
+  .nav-row { display:flex; gap:12px; }
+  .btn-back { padding:14px 24px; background:transparent; border:1.5px solid var(--border); border-radius:var(--radius-sm); color:var(--text-muted); font-family:'Noto Sans',sans-serif; font-size:15px; cursor:pointer; transition:all .18s; display:none; }
+  .btn-back:hover { border-color:var(--text-muted); color:var(--text); }
+  .btn-next { flex:1; padding:14px 24px; background:var(--green); border:none; border-radius:var(--radius-sm); color:#fff; font-family:'Noto Sans',sans-serif; font-size:15px; font-weight:600; cursor:pointer; transition:all .2s; box-shadow:0 2px 12px rgba(26,158,110,.25); }
+  .btn-next:hover:not(:disabled) { background:var(--green-dark); }
+  .btn-next:disabled { opacity:.4; cursor:default; box-shadow:none; }
+
+  .step-page { display:none; }
+  .step-page.active { display:block; animation:fadeUp .3s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  .explain-btn { display:inline-flex; align-items:center; gap:4px; background:var(--green-light); color:var(--green-dark); border:1px solid rgba(26,158,110,.2); border-radius:999px; padding:4px 12px; font-family:'Noto Sans',sans-serif; font-size:12px; font-weight:600; cursor:pointer; transition:all .18s; }
+  .explain-btn:hover { background:var(--green); color:#fff; }
+
+  /* RESULT */
+  #result { display:none; padding-top:40px; animation:fadeUp .5s ease both; }
+
+  /* Result Hero */
+  .res-hero { text-align:center; margin-bottom:32px; padding:32px 24px; background:linear-gradient(135deg,var(--green-dark) 0%,var(--green) 100%); border-radius:20px; color:#fff; position:relative; overflow:hidden; }
+  .res-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:160px; height:160px; background:rgba(255,255,255,.07); border-radius:50%; }
+  .res-hero::after { content:''; position:absolute; bottom:-30px; left:-20px; width:120px; height:120px; background:rgba(255,255,255,.05); border-radius:50%; }
+  .res-check { width:56px; height:56px; background:rgba(255,255,255,.2); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:26px; }
+  .res-hero-title { font-family:var(--font-display); font-size:clamp(18px,3vw,24px); font-weight:700; margin-bottom:8px; }
+  .res-hero-sub { font-size:14px; opacity:.85; line-height:1.6; }
+
+  /* Profile summary */
+  .profile-strip { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
+  .profile-chip { display:flex; align-items:center; gap:6px; background:var(--surface); border:1.5px solid var(--border); border-radius:999px; padding:6px 14px; font-size:12px; font-weight:500; color:var(--text-muted); }
+  .profile-chip .chip-icon { font-size:14px; }
+
+  /* Winner card */
+  .winner-wrap { position:relative; margin-bottom:12px; }
+  .winner-label { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--green); color:#fff; font-size:11px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; padding:4px 18px; border-radius:999px; white-space:nowrap; z-index:2; box-shadow:0 2px 12px rgba(26,158,110,.4); }
+  .broker-card { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:22px; }
+  .broker-card.winner { border-color:var(--green); box-shadow:0 6px 40px rgba(26,158,110,.18); padding-top:28px; }
+  .broker-card.runner { border-color:var(--border); }
+
+  /* Match meter */
+  .match-meter { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .match-circle { width:60px; height:60px; flex-shrink:0; position:relative; }
+  .match-circle svg { transform:rotate(-90deg); }
+  .match-pct { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--green); }
+  .match-info { flex:1; }
+  .broker-name { font-family:var(--font-display); font-size:16px; font-weight:700; margin-bottom:3px; }
+  .broker-tagline { font-size:13px; color:var(--text-muted); line-height:1.5; }
+
+  /* Section labels */
+  .section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text-light); margin-bottom:8px; margin-top:16px; }
+
+  /* Pros / Cons */
+  .pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .pros, .cons { border-radius:10px; padding:12px 14px; }
+  .pros { background:#f0fdf4; border:1px solid #bbf7d0; }
+  .cons { background:#fffbeb; border:1px solid #fde68a; }
+  .pros-title { font-size:11px; font-weight:700; color:#166534; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; display:flex; align-items:center; gap:4px; }
+  .cons-title { font-size:11px; font-weight:700; color:#92400e; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; display:flex; align-items:center; gap:4px; }
+  .pros li, .cons li { font-size:12px; line-height:1.55; list-style:none; padding-left:14px; position:relative; margin-bottom:4px; }
+  .pros li::before { content:'✓'; position:absolute; left:0; color:#16a34a; font-weight:700; }
+  .cons li::before { content:'!'; position:absolute; left:0; color:#d97706; font-weight:700; }
+
+  /* Commission box */
+  .comm-box { background:var(--green-light); border:1px solid rgba(26,158,110,.2); border-radius:10px; padding:12px 14px; margin-bottom:14px; }
+  .comm-title { font-size:11px; font-weight:700; color:var(--green-dark); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
+  .comm-text { font-size:13px; color:var(--green-dark); line-height:1.6; }
+
+  /* Feature pills row */
+  .tags-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .tag { font-size:11px; font-weight:600; padding:4px 10px; background:#f1f5f9; color:#475569; border-radius:6px; border:1px solid #e2e8f0; }
+  .tag.green { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+
+  /* Warning */
+  .warn-box { display:flex; gap:8px; align-items:flex-start; background:var(--amber-light); border:1px solid rgba(245,166,35,.3); border-radius:10px; padding:11px 13px; font-size:12.5px; color:#78520a; line-height:1.55; }
+  .warn-icon { flex-shrink:0; font-size:15px; margin-top:1px; }
+
+  /* Runner-up cards */
+  .runners-title { font-family:var(--font-display); font-size:13px; font-weight:600; margin-bottom:12px; margin-top:28px; color:var(--text); }
+  .runner-row { display:flex; align-items:center; gap:14px; padding:14px 16px; background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius-sm); margin-bottom:8px; }
+  .runner-rank { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--border); width:28px; text-align:center; flex-shrink:0; }
+  .runner-info { flex:1; min-width:0; }
+  .runner-name { font-size:13px; font-weight:600; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .runner-desc { font-size:12px; color:var(--text-muted); line-height:1.45; }
+  .runner-meter { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+  .runner-pct { font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--green); }
+  .runner-bar-wrap { width:60px; height:4px; background:var(--border); border-radius:4px; overflow:hidden; }
+  .runner-bar-fill { height:100%; background:var(--green); border-radius:4px; }
+
+  /* Compare table */
+  .compare-wrap { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:28px; }
+  .compare-title { font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.8px; padding:14px 18px 10px; border-bottom:1px solid var(--border); }
+  .compare-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .compare-table th { padding:9px 12px; background:#f8fafc; color:var(--text-muted); font-weight:600; font-size:11px; text-align:left; border-bottom:1px solid var(--border); }
+  .compare-table th.highlight { background:var(--green-light); color:var(--green-dark); }
+  .compare-table td { padding:9px 12px; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
+  .compare-table tr:last-child td { border-bottom:none; }
+  .compare-table td.highlight { background:#f9fefb; }
+  .cmp-yes { color:#16a34a; font-weight:600; }
+  .cmp-no  { color:#94a3b8; }
+  .cmp-warn { color:#d97706; font-weight:600; }
+
+  /* Others */
+  .others-section { padding:16px 20px; background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); margin-bottom:28px; }
+  .others-title { font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:10px; }
+  .others-grid { display:flex; flex-wrap:wrap; gap:8px; }
+  .other-pill { display:flex; align-items:center; gap:6px; padding:5px 12px; background:var(--bg); border:1px solid var(--border); border-radius:999px; font-size:12px; color:var(--text-muted); }
+  .other-score { font-size:11px; font-weight:600; color:var(--text-light); }
+
+  .restart-btn { width:100%; padding:16px; background:transparent; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-family:'Noto Sans',sans-serif; font-size:15px; font-weight:500; color:var(--text-muted); cursor:pointer; transition:all .18s; }
+  .restart-btn:hover { border-color:var(--text-muted); color:var(--text); }
+  @media(max-width:480px){ .pros-cons{grid-template-columns:1fr;} .compare-table th,.compare-table td{padding:7px 8px;font-size:11px;} }
+  @media(max-width:480px){ .hero-stats{gap:20px} .stat-num{font-size:18px} }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag"><span class="hero-dot"></span>Брокер таңдаушы</div>
+  <h1 class="hero-title">
+    <span class="line-muted">Өзіңе сәйкес келетін брокерді</span>
+    <span class="line-accent">1 минутта тап</span>
+  </h1>
+  <p class="hero-sub">7 қарапайым сұраққа жауап бер — жүйе сенің капиталыңа, мақсатыңа және тәжірибеңе сай ең үздік брокерді анықтайды.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">8</span><span class="stat-label">Брокер</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="stat-num">7</span><span class="stat-label">Сұрақ</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="stat-num stat-num-inline"><span>1</span><span class="stat-num-suffix">мин</span></span><span class="stat-label">Уақыт</span></div>
+  </div>
+  <button class="start-btn" onclick="startQuiz()">
+    Тестті бастау
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
+  </button>
+  <p class="hero-note">Тіркелу қажет емес · Тегін</p>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="quiz-header">
+    <span class="quiz-logo">BrokerTap</span>
+    <span class="quiz-counter" id="counter">1 / 7</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+
+  <!-- Q1: Тәжірибе — step 0 -->
+  <div class="step-page active" data-step="0">
+    <div class="q-label">Сұрақ 1</div>
+    <div class="q-title">Бұрын инвестиция жасап көрдіңіз бе?</div>
+    <div class="q-sub">Сізге сай келетін дұрыс брокерді табу үшін ШЫНАЙЫ жауап беріңіз 😊</div>
+    <div class="options-grid">
+      <div class="opt-card" data-val="beginner" onclick="pick(this)">
+        <span class="opt-icon">🐣</span>
+        <div class="opt-body">
+          <div class="opt-name">Жоқ, мүлдем жаңадан бастаймын</div>
+          <div class="opt-hint">Брокер, акция дегенді жаңадан үйреніп жүрмін</div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="some" onclick="pick(this)">
+        <span class="opt-icon">📱</span>
+        <div class="opt-body">
+          <div class="opt-name">Иә, 1–2 жылдық тәжірибем бар</div>
+          <div class="opt-hint">Қазірдің өзінде бір-екі брокерді пайдаланамын, негізін білемін</div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="experienced" onclick="pick(this)">
+        <span class="opt-icon">💼</span>
+        <div class="opt-body">
+          <div class="opt-name">Иә, тәжірибем мол</div>
+          <div class="opt-hint">Ұзақ жылдар бойы (кемі 3 жыл) инвестиция жасап келемін</div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2: Капитал — step 1 -->
+  <div class="step-page" data-step="1">
+    <div class="q-label">Сұрақ 2</div>
+    <div class="q-title">Ай сайын қанша инвестиция жасайсыз?</div>
+    <div class="q-sub">Қалтаңызға салмақ салмай, айына қанша қаражатты инвестицияға құя аласыз?</div>
+    <div class="options-grid">
+      <div class="opt-card" data-val="tiny" onclick="pick(this)">
+        <span class="opt-icon">🌱</span>
+        <div class="opt-body"><div class="opt-name">20–100$ (10 000 – 50 000 ₸)</div><div class="opt-hint">Жаңа бастаушы инвестор</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="small" onclick="pick(this)">
+        <span class="opt-icon">💵</span>
+        <div class="opt-body"><div class="opt-name">100–300$ (50 000 – 150 000 ₸)</div><div class="opt-hint">Шағын инвестор</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="medium" onclick="pick(this)">
+        <span class="opt-icon">💰</span>
+        <div class="opt-body"><div class="opt-name">300–1 000$ (150 000 – 500 000 ₸)</div><div class="opt-hint">Орташа инвестор</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="large" onclick="pick(this)">
+        <span class="opt-icon">📈</span>
+        <div class="opt-body"><div class="opt-name">1 000–3 000$ (500 000 – 1 500 000 ₸)</div><div class="opt-hint">Белсенді инвестор</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="xlarge" onclick="pick(this)">
+        <span class="opt-icon">🏦</span>
+        <div class="opt-body"><div class="opt-name">3 000–10 000$ (1 500 000 – 5 000 000 ₸)</div><div class="opt-hint">Ірі инвестор</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="xxlarge" onclick="pick(this)">
+        <span class="opt-icon">🏛️</span>
+        <div class="opt-body"><div class="opt-name">10 000$+ (5 000 000 ₸ жоғары)</div><div class="opt-hint">Институционалды инвестор</div></div>
+        <div class="opt-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3: Мақсат — step 2 (MULTI-SELECT, max 3) -->
+  <div class="step-page" data-step="2">
+    <div class="q-label">Сұрақ 3</div>
+    <div class="q-title">Инвестициялаудағы негізгі мақсатыңыз қандай?</div>
+    <div class="q-sub">Өзіңізге жақын мақсаттарды таңдаңыз</div>
+    <div class="multi-hint">☑ Бірнеше мақсат таңдай аласыз (максимум 3)</div>
+    <div class="options-grid" id="goalGrid">
+      <div class="opt-card multi" data-val="protect" onclick="pickMulti(this,2,3)">
+        <span class="opt-icon">💰</span>
+        <div class="opt-body">
+          <div class="opt-name">Ақшамды инфляциядан қорғап, аздап көбейту</div>
+          <div class="opt-meta"><span class="risk-badge risk-low">🟢 Төмен тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card multi" data-val="dividend" onclick="pickMulti(this,2,3)">
+        <span class="opt-icon">💸</span>
+        <div class="opt-body">
+          <div class="opt-name">Тұрақты пассивті табыс (дивидендтер) алу</div>
+          <div class="opt-meta"><span class="risk-badge risk-mid">🟡 Орташа тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card multi" data-val="accumulate" onclick="pickMulti(this,2,3)">
+        <span class="opt-icon">🏠</span>
+        <div class="opt-body">
+          <div class="opt-name">Бірнеше жылдан кейін үй алу немесе бала оқыту үшін капитал жинау</div>
+          <div class="opt-meta"><span class="risk-badge risk-mid">🟡 Орташа тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card multi" data-val="growth" onclick="pickMulti(this,2,3)">
+        <span class="opt-icon">📈</span>
+        <div class="opt-body">
+          <div class="opt-name">Қысқа уақытта акциялардың өсуінен барынша пайда табу</div>
+          <div class="opt-meta"><span class="risk-badge risk-high">🔴 Жоғары тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card multi" data-val="retirement" onclick="pickMulti(this,2,3)">
+        <span class="opt-icon">👴</span>
+        <div class="opt-body">
+          <div class="opt-name">Зейнетке қор жинау және қарттықты қамтамасыз ету</div>
+          <div class="opt-meta"><span class="risk-badge risk-low">🟢 Төмен тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card multi" data-val="bigpurchase" onclick="pickMulti(this,2,3)">
+        <span class="opt-icon">🚗</span>
+        <div class="opt-body">
+          <div class="opt-name">Ірі зат сатып алуға (көлік, техника т.б.) қаражат жинау</div>
+          <div class="opt-meta"><span class="risk-badge risk-mid">🟡 Орташа тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card multi" data-val="longterm" onclick="pickMulti(this,2,3)">
+        <span class="opt-icon">💎</span>
+        <div class="opt-body">
+          <div class="opt-name">Активтерді 10–15 жыл бойы сақтап, өсіру</div>
+          <div class="opt-meta"><span class="risk-badge risk-low">🟢 Төмен тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4: Инвестор стилі — step 3 -->
+  <div class="step-page" data-step="3">
+    <div class="q-label">Сұрақ 4</div>
+    <div class="q-title">Өзіңізді қай инвестор түріне жатқызасыз?</div>
+    <div class="q-sub">Төмендегі стильдердің ішінен өзіңізге ең жақынын таңдаңыз</div>
+    <div class="options-grid">
+      <div class="opt-card" data-val="passive" onclick="pick(this)">
+        <span class="opt-icon">🛋️</span>
+        <div class="opt-body">
+          <div class="opt-name">Пассивті инвестор («Сатып ал да, ұмыт»)</div>
+          <div class="opt-hint">Айына 1-2 рет қана инвестиция жасаймын</div>
+          <div class="opt-meta"><span class="risk-badge risk-low">🟢 Төмен тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="moderate" onclick="pick(this)">
+        <span class="opt-icon">📊</span>
+        <div class="opt-body">
+          <div class="opt-name">Орташа белсенді инвестор («Нарықты бақылаушы»)</div>
+          <div class="opt-hint">Портфелімді жиі тексеріп, аптасына бірнеше рет инвестиция жасаймын</div>
+          <div class="opt-meta"><span class="risk-badge risk-mid">🟡 Орташа тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="active" onclick="pick(this)">
+        <span class="opt-icon">⚡</span>
+        <div class="opt-body">
+          <div class="opt-name">Өте белсенді инвестор</div>
+          <div class="opt-hint">Күн сайын инвестиция жасаймын және бағаның өзгеруін күнде қадағалаймын</div>
+          <div class="opt-meta"><span class="risk-badge risk-high">🔴 Жоғары тәуекел</span></div>
+        </div>
+        <div class="opt-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5: Нарық — step 4 -->
+  <div class="step-page" data-step="4">
+    <div class="q-label">Сұрақ 5</div>
+    <div class="q-title">Қандай биржаларға кіргіңіз келеді?</div>
+    <div class="q-sub">Инвестиция салғыңыз келетін компанияларды таңда</div>
+    <div class="options-grid">
+      <div class="opt-card" data-val="kz_only" onclick="pick(this)">
+        <span class="opt-icon">🇰🇿</span>
+        <div class="opt-body"><div class="opt-name">Тек KASE / AIX</div><div class="opt-hint">Тек қазақстандық компанияларды сатып аламын</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="us_only" onclick="pick(this)">
+        <span class="opt-icon">🇺🇸</span>
+        <div class="opt-body"><div class="opt-name">Тек NASDAQ / NYSE</div><div class="opt-hint">Apple, Tesla, Amazon сияқты АҚШ компанияларын сатып аламын</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="both" onclick="pick(this)">
+        <span class="opt-icon">🌍</span>
+        <div class="opt-body"><div class="opt-name">Екеуі де / Барлық нарықтар</div><div class="opt-hint">Қазақстандық та, шетелдік те компанияларды сатып аламын</div></div>
+        <div class="opt-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q6: Опциондар — step 5 -->
+  <div class="step-page" data-step="5">
+    <div class="q-label">Сұрақ 6</div>
+    <div class="q-title">Опциондармен жұмыс жасайсыз ба?</div>
+    <div class="q-sub">Туынды қаржы құралдарына инвестиция жасайсыз ба? &nbsp;<button class="explain-btn" onclick="showOptionModal()">Опцион деген не? ℹ</button></div>
+    <div class="options-grid">
+      <div class="opt-card" data-val="no_options" onclick="pick(this)">
+        <span class="opt-icon">📈</span>
+        <div class="opt-body"><div class="opt-name">Жоқ, тек акциялар / ETF</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="yes_options" onclick="pick(this)">
+        <span class="opt-icon">🎯</span>
+        <div class="opt-body"><div class="opt-name">Иә, опциондар қажет</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="yes_options" onclick="pick(this)">
+        <span class="opt-icon">🤔</span>
+        <div class="opt-body"><div class="opt-name">Опционның не екенін түсінбеймін</div></div>
+        <div class="opt-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q7: W-8BEN — step 6 -->
+  <div class="step-page" data-step="6">
+    <div class="q-label">Сұрақ 7</div>
+    <div class="q-title">W-8BEN / 1042-S форма маңызды ма?</div>
+    <div class="q-sub">АҚШ дивидендтеріне салықты азайту үшін қолданылады</div>
+    <div class="options-grid">
+      <div class="opt-card" data-val="need_w8" onclick="pick(this)">
+        <span class="opt-icon">📋</span>
+        <div class="opt-body"><div class="opt-name">Иә, маңызды</div><div class="opt-hint">АҚШ акцияларындағы дивидендтерге салықты азайту</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="no_w8" onclick="pick(this)">
+        <span class="opt-icon">🤷</span>
+        <div class="opt-body"><div class="opt-name">Жоқ / Маңызды емес</div><div class="opt-hint">Қазіргіше маңызды емес</div></div>
+        <div class="opt-check"></div>
+      </div>
+      <div class="opt-card" data-val="need_w8" onclick="pick(this)">
+        <span class="opt-icon">❓</span>
+        <div class="opt-body"><div class="opt-name">Бұл не екенін білмеймін</div></div>
+        <div class="opt-check"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Опцион модалы -->
+  <div id="optionModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;border-radius:20px;max-width:480px;width:100%;padding:32px;position:relative;max-height:90vh;overflow-y:auto;">
+      <button onclick="hideOptionModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#64748b;line-height:1;">✕</button>
+      <div style="font-size:28px;margin-bottom:12px;">🎯</div>
+      <div style="font-family:'Unbounded',sans-serif;font-size:18px;font-weight:600;color:#0f1923;margin-bottom:16px;">Опцион деген не?</div>
+      <div style="font-size:15px;color:#334155;line-height:1.7;margin-bottom:16px;"><strong>Қарапайым тілмен:</strong> Опцион — болашақта белгіленген бағамен акция <em>сатып алу немесе сату құқығы.</em></div>
+      <div style="background:#f0f4f0;border-radius:12px;padding:16px;margin-bottom:16px;font-size:14px;color:#334155;line-height:1.7;">
+        <strong>Мысал:</strong> Бүгін Apple акциясы $150 тұрады. Сен «1 айдан кейін $160-қа сатып алу» опционын $5-қа сатып аласың.<br><br>
+        ✅ Егер баға $180-ға өссе — сен $160-қа аласың, $20 пайда.<br>
+        ❌ Егер баға $140-қа түссе — тек $5 жоғалтасың.
+      </div>
+      <div style="font-size:14px;color:#64748b;line-height:1.6;margin-bottom:20px;">Опциондар — тәжірибелі инвесторларға арналған күрделі құрал.</div>
+      <button onclick="hideOptionModal()" style="width:100%;padding:14px;background:#1a9e6e;color:#fff;border:none;border-radius:10px;font-family:'Noto Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;">Түсінікті, жабу</button>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-back" id="backBtn" onclick="goBack()">← Артқа</button>
+    <button class="btn-next" id="nextBtn" disabled onclick="goNext()">Келесі →</button>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result"></section>
+</div>
+
+<script>
+function showOptionModal(){ document.getElementById('optionModal').style.display='flex'; document.body.style.overflow='hidden'; }
+function hideOptionModal(){ document.getElementById('optionModal').style.display='none'; document.body.style.overflow=''; }
+document.getElementById('optionModal').addEventListener('click',function(e){ if(e.target===this) hideOptionModal(); });
+
+var answers={}, currentStep=0, TOTAL=7;
+var steps=document.querySelectorAll('.step-page');
+
+// multiAnswers[step] = array of selected vals
+var multiAnswers={};
+
+function startQuiz(){ document.getElementById('hero').style.display='none'; document.getElementById('quiz').style.display='block'; updateUI(); }
+
+function pick(el){
+  el.closest('.step-page').querySelectorAll('.opt-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  answers['s'+currentStep]=el.getAttribute('data-val');
+  document.getElementById('nextBtn').disabled=false;
+}
+
+// Multi-select picker: step = step index, max = max selections
+function pickMulti(el, step, max){
+  var val = el.getAttribute('data-val');
+  if(!multiAnswers[step]) multiAnswers[step]=[];
+
+  if(el.classList.contains('selected')){
+    // deselect
+    el.classList.remove('selected');
+    multiAnswers[step] = multiAnswers[step].filter(function(v){ return v !== val; });
+  } else {
+    if(multiAnswers[step].length >= max){
+      // flash the card to indicate limit
+      el.style.borderColor='#f5a623';
+      setTimeout(function(){ el.style.borderColor=''; }, 600);
+      return;
+    }
+    el.classList.add('selected');
+    multiAnswers[step].push(val);
+  }
+  // store as comma-joined string in answers
+  answers['s'+step] = multiAnswers[step].length > 0 ? multiAnswers[step].join(',') : null;
+  document.getElementById('nextBtn').disabled = !answers['s'+step];
+}
+
+// step 6 = W-8BEN, skip if kz_only (s4)
+function shouldSkip(s){ return s===6 && answers.s4==='kz_only'; }
+function visTotal(){ return answers.s4==='kz_only'?6:7; }
+function visCur(){ return (answers.s4==='kz_only'&&currentStep>=6)?6:currentStep+1; }
+
+function updateUI(){
+  document.getElementById('prog').style.width=(currentStep/TOTAL*100)+'%';
+  document.getElementById('counter').textContent=Math.min(visCur(),visTotal())+' / '+visTotal();
+  document.getElementById('backBtn').style.display=currentStep>0?'block':'none';
+  document.getElementById('nextBtn').disabled=!answers['s'+currentStep];
+  var isLast=currentStep===TOTAL-1||(answers.s4==='kz_only'&&currentStep===5);
+  document.getElementById('nextBtn').textContent=isLast?'Нәтижені көру ✓':'Келесі →';
+}
+
+function goNext(){
+  if(!answers['s'+currentStep]) return;
+  currentStep++;
+  if(shouldSkip(currentStep)){ answers.s6='no_w8'; currentStep++; }
+  if(currentStep>=TOTAL){ showResult(); return; }
+  steps.forEach(function(s){s.classList.remove('active');});
+  steps[currentStep].classList.add('active');
+  updateUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goBack(){
+  if(currentStep<=0) return;
+  currentStep--;
+  if(shouldSkip(currentStep)){ delete answers.s6; currentStep--; }
+  steps.forEach(function(s){s.classList.remove('active');});
+  steps[currentStep].classList.add('active');
+  updateUI();
+}
+
+// ── Комиссия мысалы ──
+function commEx(key,cap,market){
+  var kzt=(market==='kz_only');
+  var mid={tiny:60,small:200,medium:650,large:2000,xlarge:6500,xxlarge:15000};
+  var usd=mid[cap]||200, tg=Math.round(usd*450);
+  var fmt=function(n){return n.toLocaleString();};
+
+  var ex={
+    FFG:function(){
+      if(kzt){ var c=Math.round(tg*0.00085); return fmt(tg)+' ₸-ға KASE-да акция алсаң, комиссия шамамен '+fmt(c)+' ₸ (0.085%).'; }
+      return '$'+usd+'-ға NASDAQ-та акция алсаң, комиссия $'+(usd*0.0012+1.2).toFixed(2)+' (0.12% + $1.2).';
+    },
+    Paidax:function(){
+      if(kzt){
+        if(usd<=100) return fmt(tg)+' ₸-ға мәміле — комиссия нөл! (айлық $100 лимитіне дейін)';
+        return fmt(tg)+' ₸-ға акция алсаң, комиссия '+fmt(Math.round(tg*0.002))+' ₸ (0.2%).';
+      }
+      if(usd<=100) return '$'+usd+'-ға мәміле — комиссия нөл! (айлық $100 лимитіне дейін)';
+      return '$'+usd+'-ға акция алсаң, комиссия $'+(usd*0.002).toFixed(2)+' (0.2%).';
+    },
+    TabysPro:function(){
+      var sh=Math.max(1,Math.round(usd/50));
+      if(kzt){ return fmt(tg)+' ₸-ға (~'+sh+' акция) алсаң, комиссия '+fmt(Math.round(tg*0.004)+sh*5)+' ₸ (0.4% + акция санына қарай).'; }
+      return '$'+usd+'-ға (~'+sh+' акция) алсаң, комиссия $'+(usd*0.004+sh*0.01).toFixed(2)+' (0.4% + $0.01/акция).';
+    },
+    IBKR:function(){
+      var sh=Math.max(1,Math.round(usd/50));
+      var c=Math.max(0.35,sh*0.005).toFixed(2);
+      if(kzt){ return fmt(tg)+' ₸-ға (~'+sh+' акция) алсаң, IBKR-де комиссия небәрі '+fmt(Math.round(parseFloat(c)*450))+' ₸.'; }
+      return '$'+usd+'-ға (~'+sh+' акция) алсаң, IBKR-де комиссия небәрі $'+c+' — өте арзан.';
+    },
+    Jusan:function(){
+      if(kzt){ var c=Math.round(tg*0.00048); return 'KASE-да '+fmt(tg)+' ₸-ға акция алсаң, комиссия '+fmt(c)+' ₸ (0.048%) — өте арзан.'; }
+      return 'NASDAQ-та мин. комиссия $7.6. $'+usd+'-ға мәміле жасасаң, '+(7.6/usd*100).toFixed(1)+'% комиссия кетеді.';
+    },
+    Halyk:function(){
+      if(kzt){ var c=Math.max(500,Math.round(tg*0.0003)); return 'KASE-да '+fmt(tg)+' ₸-ға акция алсаң, комиссия '+fmt(c)+' ₸ (0.03%) — нарықтың ең арзаны.'; }
+      return 'NASDAQ-та мин. комиссия $20 — $'+usd+' үшін бұл '+(20/usd*100).toFixed(1)+'%, тым қымбат.';
+    },
+    JT2:function(){
+      var sh=Math.max(1,Math.round(usd/50));
+      var c=Math.max(1.5,sh*0.006).toFixed(2);
+      if(kzt){ return fmt(tg)+' ₸-ға (~'+sh+' акция) алсаң, J2T-де комиссия '+fmt(Math.round(parseFloat(c)*450))+' ₸.'; }
+      return '$'+usd+'-ға (~'+sh+' акция) алсаң, J2T-де комиссия $'+c+' ($0.006/акция, мин $1.5).';
+    },
+    Investlink:function(){
+      var sh=Math.max(1,Math.round(usd/50));
+      var c=Math.max(2,sh*0.02).toFixed(2);
+      if(kzt){ return fmt(tg)+' ₸-ға (~'+sh+' акция) алсаң, Investlink-те комиссия '+fmt(Math.round(parseFloat(c)*450))+' ₸.'; }
+      return '$'+usd+'-ға (~'+sh+' акция) алсаң, Investlink-те комиссия $'+c+' ($0.02/акция, мин $2).';
+    }
+  };
+  return ex[key]?ex[key]():'';
+}
+
+// ── Scoring ──
+function showResult(){
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('prog').style.width='100%';
+
+  var exp=answers.s0, cap=answers.s1, goalRaw=answers.s2, style=answers.s3;
+  var market=answers.s4, opts=answers.s5, w8=answers.s6;
+
+  var goals = goalRaw ? goalRaw.split(',') : [];
+  function hasGoal(g){ return goals.indexOf(g)!==-1; }
+
+  var P={FFG:0,Paidax:0,TabysPro:0,IBKR:0,Jusan:0,Halyk:0,JT2:0,Investlink:0};
+
+  // ── Experience scoring ──
+  if(exp==='beginner'){
+    P.Paidax+=8; P.TabysPro+=5; P.Jusan+=3; P.Halyk+=3; P.FFG+=2;
+    P.IBKR-=3; P.JT2-=4; P.Investlink-=4;
+  }
+  if(exp==='some'){
+    P.FFG+=4; P.IBKR+=2; P.Paidax+=3; P.Jusan+=2; P.TabysPro+=1;
+  }
+  if(exp==='experienced'){
+    P.IBKR+=5; P.FFG+=4; P.JT2+=3; P.Investlink+=3; P.Halyk+=1;
+    P.Paidax-=2; P.TabysPro-=1;
+  }
+
+  // ── Capital scoring ──
+  if(cap==='tiny'){
+    P.Paidax+=8; P.TabysPro+=5; P.Halyk+=3; P.Jusan+=2;
+    P.IBKR-=2; P.JT2-=3; P.Investlink-=3;
+  }
+  if(cap==='small'){
+    P.Paidax+=6; P.TabysPro+=3; P.Jusan+=2; P.FFG+=1;
+    P.IBKR-=1; P.JT2-=2; P.Investlink-=2;
+  }
+  if(cap==='medium'){
+    P.FFG+=4; P.IBKR+=3; P.Jusan+=2; P.Halyk+=2; P.Paidax+=2; P.TabysPro+=1;
+  }
+  if(cap==='large'){
+    P.IBKR+=4; P.FFG+=4; P.JT2+=2; P.Paidax+=1;
+    P.TabysPro-=1; P.Jusan-=1;
+  }
+  if(cap==='xlarge'){
+    P.IBKR+=5; P.JT2+=4; P.Investlink+=4; P.FFG+=3;
+    P.Paidax-=2; P.TabysPro-=2; P.Jusan-=2; P.Halyk-=1;
+  }
+  if(cap==='xxlarge'){
+    P.IBKR+=5; P.JT2+=4; P.Investlink+=5; P.FFG+=3;
+    P.Paidax-=3; P.TabysPro-=3; P.Jusan-=3; P.Halyk-=2;
+  }
+
+  // ── Goals scoring (weighted, conflicts resolved) ──
+  if(hasGoal('protect')){
+    P.Halyk+=5; P.Jusan+=3; P.Paidax+=3; P.TabysPro+=2;
+    P.FFG+=1; P.IBKR-=1; P.JT2-=2; P.Investlink-=2;
+  }
+  if(hasGoal('dividend')){
+    P.FFG+=4; P.IBKR+=3; P.Paidax+=2; P.Jusan+=2; P.Halyk+=2;
+  }
+  if(hasGoal('accumulate')){
+    P.FFG+=3; P.IBKR+=3; P.Paidax+=3; P.Jusan+=2; P.Halyk+=1; P.TabysPro+=1;
+  }
+  if(hasGoal('growth')){
+    P.IBKR+=4; P.FFG+=3; P.JT2+=3; P.Investlink+=2;
+    P.Paidax+=1; P.Halyk-=2; P.Jusan-=1;
+  }
+  if(hasGoal('retirement')){
+    P.Halyk+=4; P.Jusan+=3; P.Paidax+=3; P.FFG+=2; P.IBKR+=2;
+    P.TabysPro+=1; P.JT2-=1; P.Investlink-=1;
+  }
+  if(hasGoal('bigpurchase')){
+    P.FFG+=3; P.IBKR+=2; P.Paidax+=3; P.TabysPro+=2; P.Jusan+=1;
+  }
+  if(hasGoal('longterm')){
+    P.FFG+=4; P.IBKR+=4; P.Halyk+=3; P.Jusan+=2; P.Paidax+=2;
+    P.TabysPro+=1; P.JT2-=1; P.Investlink-=1;
+  }
+
+  // ── Style scoring ──
+  if(style==='passive'){
+    P.Paidax+=5; P.TabysPro+=2; P.Halyk+=2; P.Jusan+=2;
+    P.FFG+=1; P.IBKR+=1; P.JT2-=2; P.Investlink-=2;
+  }
+  if(style==='moderate'){
+    P.FFG+=3; P.IBKR+=3; P.Paidax+=2; P.Jusan+=1; P.TabysPro+=1;
+  }
+  if(style==='active'){
+    P.IBKR+=5; P.JT2+=4; P.FFG+=2; P.Investlink+=3;
+    P.Paidax-=2; P.TabysPro-=2; P.Halyk-=1; P.Jusan-=1;
+  }
+
+  // ── Market scoring (CRITICAL: compatibility first) ──
+  if(market==='kz_only'){
+    P.Halyk+=7; P.Jusan+=4; P.FFG+=3;
+    P.Paidax=-999; P.IBKR=-999; P.JT2=-999; P.Investlink=-999;
+  }
+  if(market==='us_only'){
+    P.IBKR+=5; P.Paidax+=4; P.FFG+=3; P.JT2+=2; P.Investlink+=1;
+    P.Halyk=-999; P.Jusan=-999; P.TabysPro-=1;
+  }
+  if(market==='both'){
+    P.FFG+=5; P.IBKR+=4; P.Jusan+=2; P.Halyk+=2;
+    P.Paidax+=1; P.TabysPro+=1;
+    P.JT2-=1; P.Investlink-=1;
+  }
+
+  // ── Options scoring ──
+  if(opts==='yes_options'){
+    P.FFG+=4; P.IBKR+=4; P.JT2+=2; P.Investlink+=2;
+    P.Paidax-=2; P.Halyk-=2; P.Jusan-=1; P.TabysPro-=1;
+  }
+  if(opts==='no_options'){
+    P.Paidax+=3; P.Jusan+=2; P.Halyk+=2; P.TabysPro+=2;
+    P.FFG+=1;
+  }
+
+  // ── W-8BEN scoring ──
+  if(w8==='need_w8'){
+    P.FFG+=4; P.Paidax+=4; P.IBKR+=4; P.JT2+=2;
+    P.Halyk-=3; P.Jusan-=3;
+  }
+  if(w8==='no_w8'){
+    P.Jusan+=2; P.Halyk+=2; P.TabysPro+=1;
+  }
+
+  // Hard exclusion: brokers with -999 are incompatible with selected market
+  var excluded={};
+  Object.keys(P).forEach(function(k){ if(P[k]<=-999){ excluded[k]=true; P[k]=0; } else if(P[k]<0){ P[k]=0; } });
+  var ranked=Object.entries(P).sort(function(a,b){return b[1]-a[1];});
+  // Filter out 0-score brokers (fully incompatible)
+  ranked = ranked.filter(function(e){ return e[1] > 0; });
+  var maxPts = ranked.length > 0 ? ranked[0][1] : 1;
+  // If only 1 broker left, show it as 100% match
+  if(ranked.length === 1) maxPts = ranked[0][1];
+
+  // ── Broker metadata ──
+  var INFO={
+    FFG:{
+      n:'Freedom Finance Global',short:'FFG',
+      tagline:'Ең кең мүмкіндіктер — KASE-дан NASDAQ-қа дейін',
+      pros:['KASE, AIX, NASDAQ, NYSE — бәрі бір жерде','Опциондар мен D-шот бар','W-8BEN толтыруға болады','Барлық тәжірибе деңгейіне сай','$1-дан бастап бөлшек акциялар'],
+      cons:['Тарифтерді түсіну қиын — 3 түрлі тариф','Халықаралық комиссия 0.12% (ортша)','Интерфейс бастаушыларға күрделі'],
+      t:['KASE','AIX','NASDAQ','NYSE','Опциондар','W-8BEN','Бөлшек акция'],
+      w:'Тарифті дұрыс таңдамаған жағдайда комиссия жоғары болуы мүмкін. «Инвестор» тарифі ең тиімдісі. Егер KZ акциялары қажет болса — Jusan (0.085%) немесе Halyk (0.03%) қарастырыңыз.'
+    },
+    Paidax:{
+      n:'Paidax',short:'Paidax',
+      tagline:'Жаңа бастаушыларға арналған — $1-дан бастап инвестиция',
+      pros:[
+        'Айлық $100-ге дейін комиссия 0%',
+        '$100-$5,000 аралығында 0.2%',
+        '$5,000+ мәмілелерде 0.1%',
+        'W-8BEN формасын толтыруға болады',
+        'Жаңа бастаушыға ыңғайлы интерфейс',
+        'Инвестицияны $1-дан бастау мүмкіндігі',
+        'Табысты инвесторлардың портфелін көшіру (Copy Trading) функциясы',
+        'AFSA (АХҚО) тарапынан ресми лицензиясы бар және қауіпсіз'
+      ],
+      cons:[
+        'ТЕК халықаралық нарық (NASDAQ) — KASE жоқ',
+        'Қазақстандық компаниялардың акциясын ала алмайсыз',
+        'Опциондар жоқ'
+      ],
+      t:['NASDAQ','W-8BEN','0% комиссия','$1-дан бастау','Copy Trading','AFSA лицензиясы'],
+      w:'⚠️ ТЕК халықаралық акциялар (NASDAQ). Қазақстандық нарыққа (KASE) рұқсаты жоқ. Егер KZ компаниялары қажет болса — Freedom Finance немесе Jusan таңдаңыз. Опциондар қолжетімсіз.'
+    },
+    TabysPro:{
+      n:'Tabys Pro',short:'Tabys',
+      tagline:'$50-ден бастап бөлшек акция — қазақстандықтарға',
+      pros:['KASE, AIX, NASDAQ, NYSE бар','$50-ден бастап бөлшек сатып алуға болады','Қазақстандық қолданба','Тіркелу оңай'],
+      cons:['Халықаралық комиссия 0.4%+$0.01/акция — өте қымбат','Опциондар жоқ','W-8BEN жоқ — АҚШ дивидендіне 30% салық'],
+      t:['KASE','AIX','NASDAQ','Бөлшек сатып алу'],
+      w:'Халықаралық комиссия 0.4% + $0.01/акция — нарықтағы ең қымбаты. W-8BEN жоқ.'
+    },
+    IBKR:{
+      n:'Interactive Brokers',short:'IBKR',
+      tagline:'Тәжірибелі инвесторларға — нарықтың ең төмен комиссиясы',
+      pros:['150+ биржа (NASDAQ, NYSE, LSE, XETRA және т.б.)','Опциондар, фьючерстер, облигациялар','W-8BEN бар','$1-дан бастап бөлшек акциялар','Комиссия $0.0035/акция (мин $0.35)','Валюта айырбастау маржасы 0.002%'],
+      cons:['KASE/AIX жоқ','Интерфейс күрделі — үйрену керек','Тіркелу батырмалы (KYC қатаң)','Клиенттік қолдау баяу'],
+      t:['150+ биржа','Опциондар','W-8BEN','Бөлшек алу','Форекс'],
+      w:'KASE/AIX жоқ. Интерфейс күрделі, бірақ Trader Workstation (TWS) немесе мобильді қосымша бар. Аккаунт ашу 1-3 күн.'
+    },
+    Jusan:{
+      n:'Jusan Invest',short:'Jusan',
+      tagline:'Қазақстан нарығының тиімді брокері',
+      pros:['KASE-да 0.085% (мин 100₸)','AIX-та 0.01%','Қазақстандық қолданба — тіркелу оңай','Jusan Bank клиенті болсаң ыңғайлы'],
+      cons:['W-8BEN жоқ — АҚШ дивидендіне 30% салық','NASDAQ комиссиясы 0.6% (мин $7.6) — қымбат','Ай сайын депозитарий ақысы ~500₸','Опциондар жоқ'],
+      t:['KASE','AIX','NASDAQ','NYSE'],
+      w:'W-8BEN жоқ. АҚШ дивидендтеріне 30% салық. Ай сайын депозитарий ақысы. Халықаралық нарыққа қымбат.'
+    },
+    Halyk:{
+      n:'Halyk Invest',short:'Halyk',
+      tagline:'Тек Қазақстан нарығы — 0.03% комиссия',
+      pros:['KASE 0.03% (мин 500₸) — нарықтың ең арзаны','Halyk Bank-пен тікелей интеграция','Таныс банк интерфейсі','Сенімділік — Halyk Bank тобы'],
+      cons:['NASDAQ/NYSE мин. комиссия $20 — өте қымбат','W-8BEN жоқ','Халықаралық нарыққа толық жарамсыз','Опциондар жоқ','Бөлшек акциялар жоқ'],
+      t:['KASE','AIX','0.03% комиссия'],
+      w:'ТЕК KASE/AIX. Халықаралық нарыққа шығу өте қымбат ($20 мин.). W-8BEN жоқ. Тек ұзақ мерзімді КЗ инвестициясына.'
+    },
+    JT2:{
+      n:'J2T (JT2)',short:'J2T',
+      tagline:'Орташа-ірі мәміле инвесторларына',
+      pros:['Опциондар бар','Мин. депозит $100','$1,500+ мәмілелерге тиімді','Тарифтер түсінікті'],
+      cons:['Мин. комиссия $1.5/мәміле — $300-ге дейін қымбат','Ақшаны шығару 3-5 жұмыс күні','КЗ биржалары жоқ','Интерфейс ескірген'],
+      t:['NASDAQ','NYSE','Опциондар'],
+      w:'Мин. комиссия $1.5/мәміле — $500-ге дейінгі мәмілелерге қымбат. Ақшаны шығару ұзақ. KASE жоқ.'
+    },
+    Investlink:{
+      n:'Investlink',short:'Investlink',
+      tagline:'Белсенді трейдерге — ірі пакет мәмілелер',
+      pros:['Опциондар бар','Ірі пакет мәмілелерге тиімді','Тәжірибелі трейдерге ыңғайлы'],
+      cons:['Мин. комиссия $2/мәміле','КЗ биржалары жоқ','Жаңа бастаушыларға қолайсыз'],
+      t:['NASDAQ','NYSE','Опциондар','$2,000+'],
+      w:'Мин. комиссия $2/мәміле. КЗ биржалары жоқ.'
+    }
+  };
+
+  // ── Human-readable profile chips ──
+  var expMap={beginner:'🐣 Жаңа бастаушы',some:'📱 1–2 жыл тәжірибе',experienced:'💼 Тәжірибелі инвестор'};
+  var capMap={tiny:'🌱 $20–100/ай',small:'💵 $100–300/ай',medium:'💰 $300–1000/ай',large:'📈 $1000–3000/ай',xlarge:'🏦 $3000–10000/ай',xxlarge:'🏛️ $10000+/ай'};
+  var marketMap={kz_only:'🇰🇿 Тек KASE/AIX',us_only:'🇺🇸 Тек NASDAQ/NYSE',both:'🌍 Барлық нарықтар'};
+  var styleMap={passive:'🛋️ Пассивті',moderate:'📊 Орташа белсенді',active:'⚡ Өте белсенді'};
+  var goalLabels={protect:'💰 Инфляциядан қорғау',dividend:'💸 Дивиденд',accumulate:'🏠 Үй/оқу',growth:'📈 Жылдам өсу',retirement:'👴 Зейнет',bigpurchase:'🚗 Ірі сатып алу',longterm:'💎 10–15 жыл'};
+
+  var profileChips='';
+  if(expMap[exp]) profileChips+='<div class="profile-chip"><span class="chip-icon"></span>'+expMap[exp]+'</div>';
+  if(capMap[cap]) profileChips+='<div class="profile-chip">'+capMap[cap]+'</div>';
+  if(marketMap[market]) profileChips+='<div class="profile-chip">'+marketMap[market]+'</div>';
+  if(styleMap[style]) profileChips+='<div class="profile-chip">'+styleMap[style]+'</div>';
+  goals.forEach(function(g){ if(goalLabels[g]) profileChips+='<div class="profile-chip">'+goalLabels[g]+'</div>'; });
+
+  // ── SVG donut helper ──
+  function donut(pct,color){
+    var r=24, circ=2*Math.PI*r, dash=circ*pct/100;
+    return '<svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="'+r+'" fill="none" stroke="#e2e8f0" stroke-width="5"/><circle cx="30" cy="30" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="5" stroke-dasharray="'+dash.toFixed(1)+' '+circ.toFixed(1)+'" stroke-linecap="round"/></svg>';
+  }
+
+  // ── Feature comparison table (top 3) ──
+  var top3=ranked.slice(0,3);
+  function cmpFeature(key,feat){
+    var feats={
+      kase:    {FFG:1,Paidax:0,TabysPro:1,IBKR:0,Jusan:1,Halyk:1,JT2:0,Investlink:0},
+      nasdaq:  {FFG:1,Paidax:1,TabysPro:1,IBKR:1,Jusan:1,Halyk:0,JT2:1,Investlink:1},
+      other:   {FFG:0,Paidax:0,TabysPro:0,IBKR:1,Jusan:0,Halyk:0,JT2:0,Investlink:0},
+      options: {FFG:1,Paidax:0,TabysPro:0,IBKR:1,Jusan:0,Halyk:0,JT2:1,Investlink:1},
+      w8ben:   {FFG:1,Paidax:1,TabysPro:0,IBKR:1,Jusan:0,Halyk:0,JT2:1,Investlink:0},
+      fraction:{FFG:1,Paidax:1,TabysPro:1,IBKR:1,Jusan:0,Halyk:0,JT2:0,Investlink:0},
+      begfr:   {FFG:1,Paidax:1,TabysPro:1,IBKR:0,Jusan:1,Halyk:1,JT2:0,Investlink:0},
+      copy:    {FFG:0,Paidax:1,TabysPro:0,IBKR:0,Jusan:0,Halyk:0,JT2:0,Investlink:0}
+    };
+    var v=feats[feat]?feats[feat][key]:0;
+    if(v===2) return '<span class="cmp-warn">⚠ Қымбат</span>';
+    return v?'<span class="cmp-yes">✓ Бар</span>':'<span class="cmp-no">— Жоқ</span>';
+  }
+
+  var cmpRows=[
+    {label:'KASE / AIX',feat:'kase'},
+    {label:'NASDAQ / NYSE',feat:'nasdaq'},
+    {label:'Басқа биржалар',feat:'other'},
+    {label:'Опциондар',feat:'options'},
+    {label:'W-8BEN',feat:'w8ben'},
+    {label:'Бөлшек акция ($1-дан)',feat:'fraction'},
+    {label:'Copy Trading',feat:'copy'},
+    {label:'Жаңадан бастаушыға',feat:'begfr'}
+  ];
+  var cmpHead='<tr><th>Мүмкіндік</th>'+top3.map(function(e,i){return'<th class="'+(i===0?'highlight':'')+'">'+(i===0?'★ ':'')+INFO[e[0]].short+'</th>';}).join('')+'</tr>';
+  var cmpBody=cmpRows.map(function(row){
+    return '<tr>'+
+      '<td style="font-size:12px;font-weight:500;color:var(--text);">'+row.label+'</td>'+
+      top3.map(function(e,i){return'<td class="'+(i===0?'highlight':'')+'" style="text-align:center;">'+cmpFeature(e[0],row.feat)+'</td>';}).join('')+
+    '</tr>';
+  }).join('');
+
+  // ── Build HTML ──
+  var html='';
+
+  // Hero banner
+  html+='<div class="res-hero"><div class="res-check">🎯</div>';
+  html+='<div class="res-hero-title">Сізге сәйкес брокер табылды!</div>';
+  html+='<div class="res-hero-sub">7 сұрақ бойынша талданды · Нәтиже дайын</div></div>';
+
+  // Profile summary
+  html+='<div class="profile-strip">'+profileChips+'</div>';
+
+  // ── Winner card ──
+  var win=top3[0], wk=win[0], wi=INFO[wk], wpct=Math.round(win[1]/maxPts*100), wce=commEx(wk,cap,market);
+
+  // Paidax special hero banner
+  if(wk==='Paidax'){
+    html+='<div style="background:linear-gradient(135deg,#0f6e4e,#1a9e6e);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#fff;display:flex;align-items:center;gap:16px;">';
+    html+='<div style="font-size:36px;flex-shrink:0;">🚀</div>';
+    html+='<div><div style="font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:4px;">Paidax — жаңа бастаушыларға ең жақсы таңдау</div>';
+    html+='<div style="font-size:13px;opacity:.9;line-height:1.5;">$1-дан бастап инвестиция жасауға болатын, AFSA лицензиясы бар, Copy Trading функциялы қауіпсіз платформа.</div></div>';
+    html+='</div>';
+    // Show KZ warning if user selected 'both' market
+    if(market==='both'){
+      html+='<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;">';
+      html+='<div style="font-size:22px;flex-shrink:0;">⚠️</div>';
+      html+='<div><div style="font-weight:700;color:#92400e;font-size:14px;margin-bottom:4px;">Маңызды ескерту: KZ акциялары жоқ</div>';
+      html+='<div style="font-size:13px;color:#78350f;line-height:1.6;">Сіз "Барлық нарықтар" таңдадыңыз, бірақ <strong>Paidax тек халықаралық акцияларды (NASDAQ)</strong> ұсынады. Қазақстандық компаниялар (KASE) үшін <strong>Freedom Finance</strong> немесе <strong>Jusan Invest</strong> қарастырыңыз.</div></div>';
+      html+='</div>';
+    }
+    html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">';
+    var badges=[['🛡️','AFSA лицензиясы'],['💰','0% ($100 дейін)'],['📉','0.2% ($100-$5K)'],['📉','0.1% ($5K+)'],['📋','W-8BEN бар'],['👥','Copy Trading'],['🇺🇸','NASDAQ']];
+    badges.forEach(function(b){ html+='<div style="display:flex;align-items:center;gap:5px;background:#fff;color:#0f6e4e;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;">'+b[0]+' '+b[1]+'</div>'; });
+    html+='</div>';
+  }
+
+  html+='<div class="winner-wrap">';
+  html+='<div class="winner-label">🏆 Ең сәйкес брокер</div>';
+  html+='<div class="broker-card winner">';
+  html+='<div class="match-meter">';
+  html+='<div class="match-circle">'+donut(wpct,'#1a9e6e')+'<div class="match-pct">'+wpct+'%</div></div>';
+  html+='<div class="match-info"><div class="broker-name">'+wi.n+'</div><div class="broker-tagline">'+wi.tagline+'</div></div>';
+  html+='</div>';
+  html+='<div class="tags-row">'+wi.t.map(function(t){return'<span class="tag green">'+t+'</span>';}).join('')+'</div>';
+  html+='<div class="section-label">Артықшылықтары мен кемшіліктері</div>';
+  html+='<div class="pros-cons">';
+  html+='<div class="pros"><div class="pros-title">✅ Артықшылықтары</div><ul>'+wi.pros.map(function(p){return'<li>'+p+'</li>';}).join('')+'</ul></div>';
+  html+='<div class="cons"><div class="cons-title">⚠ Назар аударыңыз</div><ul>'+wi.cons.map(function(c){return'<li>'+c+'</li>';}).join('')+'</ul></div>';
+  html+='</div>';
+  if(wce){ html+='<div class="comm-box"><div class="comm-title">📊 Сіздің портфеліңізге арналған комиссия мысалы</div><div class="comm-text">'+wce+'</div></div>'; }
+  html+='<div class="warn-box"><span class="warn-icon">ℹ️</span><span>'+wi.w+'</span></div>';
+  html+='</div></div>';
+
+  // ── Comparison table ──
+  html+='<div class="compare-wrap">';
+  html+='<div class="compare-title">📋 Ең үздік 3 брокерді салыстыру</div>';
+  html+='<table class="compare-table"><thead>'+cmpHead+'</thead><tbody>'+cmpBody+'</tbody></table>';
+  html+='</div>';
+
+  // ── Runner-up cards ──
+  if(ranked.length>1){
+    html+='<div class="runners-title">Балама нұсқалар</div>';
+    ranked.slice(1,3).forEach(function(entry,idx){
+      var k=entry[0], bi=INFO[k], pct=Math.round(entry[1]/maxPts*100);
+      var ce=commEx(k,cap,market);
+      html+='<div class="broker-card runner" style="margin-bottom:12px;">';
+      html+='<div class="match-meter">';
+      html+='<div class="match-circle">'+donut(pct,'#64748b')+'<div class="match-pct" style="color:#64748b;">'+pct+'%</div></div>';
+      html+='<div class="match-info"><div class="broker-name" style="font-size:14px;">'+bi.n+'</div><div class="broker-tagline">'+bi.tagline+'</div></div>';
+      html+='<span style="font-size:11px;font-weight:700;color:#94a3b8;flex-shrink:0;">'+(idx+2)+'-орын</span>';
+      html+='</div>';
+      html+='<div class="tags-row">'+bi.t.map(function(t){return'<span class="tag">'+t+'</span>';}).join('')+'</div>';
+      html+='<div class="pros-cons">';
+      html+='<div class="pros"><div class="pros-title">✅ Артықшылықтары</div><ul>'+bi.pros.map(function(p){return'<li>'+p+'</li>';}).join('')+'</ul></div>';
+      html+='<div class="cons"><div class="cons-title">⚠ Кемшіліктері</div><ul>'+bi.cons.map(function(c){return'<li>'+c+'</li>';}).join('')+'</ul></div>';
+      html+='</div>';
+      if(ce){ html+='<div class="comm-box"><div class="comm-title">📊 Комиссия мысалы</div><div class="comm-text">'+ce+'</div></div>'; }
+      html+='<div class="warn-box"><span class="warn-icon">⚠️</span><span>'+bi.w+'</span></div>';
+      html+='</div>';
+    });
+  }
+
+  // ── Others ──
+  var others=ranked.slice(3);
+  if(others.length){
+    html+='<div class="others-section"><div class="others-title">Басқа нұсқалар</div><div class="others-grid">';
+    others.forEach(function(e){ html+='<div class="other-pill">'+INFO[e[0]].short+' <span class="other-score">'+Math.round(e[1]/maxPts*100)+'%</span></div>'; });
+    html+='</div></div>';
+  }
+
+  html+='<button class="restart-btn" onclick="restart()">↺ Қайтадан тест тапсыру</button>';
+
+  document.getElementById('result').innerHTML=html;
+  document.getElementById('result').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart(){
+  answers={}; multiAnswers={}; currentStep=0;
+  steps.forEach(function(s){s.classList.remove('active');s.querySelectorAll('.opt-card').forEach(function(c){c.classList.remove('selected');});});
+  steps[0].classList.add('active');
+  document.getElementById('nextBtn').disabled=true;
+  document.getElementById('nextBtn').textContent='Келесі →';
+  document.getElementById('backBtn').style.display='none';
+  document.getElementById('result').style.display='none';
+  document.getElementById('result').innerHTML='';
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('hero').style.display='flex';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
