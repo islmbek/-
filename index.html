@@ -234,6 +234,7 @@
   @media(max-width:480px){ .pros-cons{grid-template-columns:1fr;} .compare-table th,.compare-table td{padding:7px 8px;font-size:11px;} }
   @media(max-width:480px){ .hero-stats{gap:20px} .stat-num{font-size:18px} }
 </style>
+<base target="_blank">
 </head>
 <body>
 <div class="container">
@@ -655,7 +656,7 @@ function commEx(key,cap,market){
       return 'NASDAQ-та мин. комиссия $7.6. $'+usd+'-ға мәміле жасасаң, '+(7.6/usd*100).toFixed(1)+'% комиссия кетеді.';
     },
     Halyk:function(){
-      if(kzt){ var c=Math.max(500,Math.round(tg*0.0003)); return 'KASE-да '+fmt(tg)+' ₸-ға акция алсаң, комиссия '+fmt(c)+' ₸ (0.03%) — нарықтың ең арзаны.'; }
+      if(kzt){ var c=Math.max(100,Math.round(tg*0.0003)); return 'KASE-да '+fmt(tg)+' ₸-ға акция алсаң, комиссия '+fmt(c)+' ₸ (0.03%, мин 100₸) — нарықтың ең арзаны.'; }
       return 'NASDAQ-та мин. комиссия $20 — $'+usd+' үшін бұл '+(20/usd*100).toFixed(1)+'%, тым қымбат.';
     },
     JT2:function(){
@@ -867,10 +868,10 @@ function showResult(){
     Halyk:{
       n:'Halyk Invest',short:'Halyk',
       tagline:'Тек Қазақстан нарығы — 0.03% комиссия',
-      pros:['KASE 0.03% (мин 500₸) — нарықтың ең арзаны','Halyk Bank-пен тікелей интеграция','Таныс банк интерфейсі','Сенімділік — Halyk Bank тобы'],
+      pros:['KASE 0.03% (мін 100₸) — нарықтың ең арзаны','Halyk Bank-пен тікелей интеграция','Таныс банк интерфейсі','Сенімділік — Halyk Bank тобы'],
       cons:['NASDAQ/NYSE мин. комиссия $20 — өте қымбат','W-8BEN жоқ','Халықаралық нарыққа толық жарамсыз','Опциондар жоқ','Бөлшек акциялар жоқ'],
       t:['KASE','AIX','0.03% комиссия'],
-      w:'ТЕК KASE/AIX. Халықаралық нарыққа шығу өте қымбат ($20 мин.). W-8BEN жоқ. Тек ұзақ мерзімді КЗ инвестициясына.'
+      w:'ТЕК KASE/AIX. Халықаралық нарыққа шығу өте қымбат ($20 мин.). W-8BEN жоқ. Мін. комиссия 100₸. Тек ұзақ мерзімді КЗ инвестициясына.'
     },
     JT2:{
       n:'J2T (JT2)',short:'J2T',
